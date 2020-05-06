@@ -1,5 +1,7 @@
 <?php
 
+$success = false;
+
 if ($_GET) {
 
     $city = $_GET["city"];
@@ -11,6 +13,7 @@ if ($_GET) {
     $response_json = curl_exec($ch);
     curl_close($ch);
     $response=json_decode($response_json, true);
+    $success=true;
 
 }
 
@@ -37,14 +40,22 @@ if ($_GET) {
     <form method="get">
         <div class="form-group d-flex flex-column align-items-center">
             <label for="cityInput">Enter the name of a city.</label>
-            <input type="text" name="city" class="form-control col-sm-6" id="cityInput">
+            <input type="text" name="city" class="form-control col-md-6" id="cityInput" placeholder="Eg. London, Tokyo">
         </div>
         <button type="submit" class="btn btn-primary">Go!</button>
     </form>
     
     <?php
     
-    echo '<div class="alert alert-success col-sm-6 my-2 mx-auto"><h4 class="alert-heading">'.$city.'</h4><hr><p class="mb-0">API response goes here</p></div>';
+    if ($success) {
+        
+        echo '<div class="alert alert-success col-sm-6 my-2 mx-auto"><h4 class="alert-heading">'.$city.'</h4><hr><p class="mb-0">API response goes here</p></div>';
+    
+    } else {
+        
+        echo '<div class="alert alert-danger col-sm-6 my-2 mx-auto"><h4 class="alert-heading">Enter a city name</h4><hr><p class="mb-0">API response goes here</p></div>';
+        
+    }
     
     ?>
     

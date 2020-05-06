@@ -26,3 +26,9 @@ button {
     padding-right: 1.2rem;
     
 }
+
+.alert {
+    
+    max-height: 10em;
+    
+}
