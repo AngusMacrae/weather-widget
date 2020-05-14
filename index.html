@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" href="styles2.css">
+
+    <title>What's the Weather?</title>
+</head>
+
+<body>
+    <div id="main-container">
+        <h1>What's the Weather?</h1>
+        <div id="input-container">
+            <input id="input" type="text" placeholder="E.g. London, Taipei">
+            <button id="submit">Go!</button>
+        </div>
+        <div id="results-container">
+            <div id="heading-container">
+                <h3 id="location_disp"></h3>
+                <label for="cf-toggle">C/F</label>
+                <input type="checkbox" id="cf-toggle">
+            </div>
+            <div class="weather-container">
+                <img id="icon-img">
+                <span id="desc_disp"></span>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
