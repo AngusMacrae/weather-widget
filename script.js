@@ -123,7 +123,7 @@ function displayWeather(weather) {
         tempDisp.innerHTML = (Math.round(temp*10))/10 + " &deg;C";
         humidityDisp.innerHTML = humidity + "% humidity";
         windDisp.innerHTML = windDirection + " wind @ " + windSpeed + " m/s ";
-        currentTimeDisp.innerHTML = "Local time is " + currentTime;
+        currentTimeDisp.innerHTML = "The local time is " + currentTime;
         sunriseTimeDisp.innerHTML = sunriseTime;
         sunsetTimeDisp.innerHTML = sunsetTime;
         

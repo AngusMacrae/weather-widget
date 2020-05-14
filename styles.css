@@ -51,7 +51,7 @@ select {
 /***************************************/
 
 body {
-    background: url(sky-background.jpg);
+    background: url(clouds-background.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -117,27 +117,14 @@ button:hover {
     background-color: hsl(60, 100%, 40%);
 }
 
-/*
-button::after {
-    content: "o";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 50%;
-    transform: translate(-50%, -50%);
-    z-index: -1;
-}
-*/
-
 .spinner {
     display: none;
     margin-top: 2rem;
     width: 32px;
     height: 32px;
-    border: 4px rgba(137, 137, 137, 0.25) solid;
+    border: 4px rgba(137, 137, 137, 0.7) solid;
     border-top: 4px white solid;
     border-radius: 50%;
-    box-shadow: 0px 1px 1px #383838;
     animation: spCircRot .6s infinite linear;
 }
 
@@ -253,7 +240,6 @@ button::after {
     margin-top: 1rem;
 }
 
-
 #settings-container {
     display: inline-block;
     position: absolute;
@@ -273,6 +259,8 @@ button::after {
 
 #settings-icon-wrapper {
     margin-left: auto;
+    display: flex;
+    align-items: center;
 }
 
 #settings-icon-wrapper:hover #settings-icon {
