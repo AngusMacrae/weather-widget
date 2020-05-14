@@ -33,16 +33,11 @@ submitBtn.addEventListener("click", function () {
         
         resCont.classList.remove("visible");
         spinner.classList.add("visible");
+        submitBtn.classList.add("collapsed");
         title.classList.remove("showing");
         fetchWeather(city);
 
     }
-
-});
-
-settingsBtn.addEventListener("click", function () {
-
-//    settings.classList.remove("collapsed");
 
 });
 
@@ -58,10 +53,7 @@ function fetchWeather(targetCity) {
 }
 
 function displayWeather(weather) {
-
-    // process direction into N, NW etc
-    // use timezone and current time to figure out current time and display night/day
-
+    
     let city = weather.name;
     let country = weather.sys.country;
     let main = weather.weather[0].main;
@@ -75,8 +67,8 @@ function displayWeather(weather) {
     let windDirection = weather.wind.deg;
     
     let timezone = weather.timezone;
-    let sunriseTime = unixToHumanTime(weather.sys.sunrise - timezone);
-    let sunsetTime = unixToHumanTime(weather.sys.sunset - timezone);
+    let sunriseTime = unixToHumanTime(weather.sys.sunrise);
+    let sunsetTime = unixToHumanTime(weather.sys.sunset);
 
     let currentTime = new Date();
     currentTime = unixToHumanTime(currentTime.getTime() - timezone);
@@ -121,18 +113,16 @@ function displayWeather(weather) {
     function showResults () {
         title.classList.add("showing");
         spinner.classList.remove("visible");
+        submitBtn.classList.remove("collapsed");
         
         body.style.backgroundImage = "url(" + bgImg.src + ")";
         headingDisp.innerHTML = "Current weather in " + city + ", " + country;
         iconImg.src = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
-//        mainDisp.innerHTML = main;
         descDisp.innerHTML = desc.charAt(0).toUpperCase() + desc.substr(1);
         cloudsDisp.innerHTML = clouds + "% cloud cover";
         tempDisp.innerHTML = (Math.round(temp*10))/10 + " &deg;C";
-//        tempFeelsDisp.innerHTML = "Feels like " +(Math.round(tempFeels*10))/10 + "C";
         humidityDisp.innerHTML = humidity + "% humidity";
         windDisp.innerHTML = windDirection + " wind @ " + windSpeed + " m/s ";
-//        windDirectionDisp.innerHTML = windDirection;
         currentTimeDisp.innerHTML = "Local time is " + currentTime;
         sunriseTimeDisp.innerHTML = sunriseTime;
         sunsetTimeDisp.innerHTML = sunsetTime;
