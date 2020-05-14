@@ -90,12 +90,12 @@ button {
 }
 
 #input {
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255, 255, 255, 0.9);
     transition: backround-color 0.2s;
 }
 
 #input:focus {
-    background-color: rgba(255,255,255,1);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 button {
@@ -104,7 +104,7 @@ button {
     padding: 0.5rem 0;
     width: 4rem;
     opacity: 1;
-    transition: width 0.4s 1s, opacity 0.3s 1s;
+    transition: width 0.4s 0.8s, opacity 0.3s 0.9s;
 }
 
 button.collapsed {
@@ -142,32 +142,42 @@ button:hover {
     display: block;
 }
 
-#display-box {
+.box {
     opacity: 0;
     display: none;
-    transform: scale(0.4);
-    width: 80%;
     margin: 2rem auto 0;
     color: #404040;
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 0.1rem;
     padding: 1rem 1.5rem;
+    box-shadow: 0px 1px 9px -1px #000000;
+}
+
+#display-box {
+
     display: flex;
+    width: 80%;
     flex-direction: column;
     overflow-x: hidden;
     position: relative;
-    box-shadow: 0px 1px 9px -1px #000000;
+    top: -4rem;
+    transform: scale(0.4);
+
 }
 
 #heading-container {
     display: flex;
 }
 
-#display-box.visible {
+.box.visible {
     display: block;
     opacity: 1;
+}
+
+#display-box.visible {
     transform: scale(1);
-    transition: opacity 0.7s 0.1s, transform 0.8s;
+    top: 0;
+    transition: opacity 0.7s 0.1s, transform 0.8s, top 0.8s;
 }
 
 .weather-container {
@@ -196,7 +206,7 @@ button:hover {
 #desc_disp {
     font-weight: bold;
 }
- 
+
 #left-col {
     margin-right: 6vw;
     margin-left: 2vw;
@@ -321,7 +331,7 @@ button:hover {
 
 
 @media (max-width: 730px) {
-    
-/*    stack vertically */
-    
+
+    /*    stack vertically */
+
 }

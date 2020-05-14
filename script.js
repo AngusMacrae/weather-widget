@@ -17,6 +17,7 @@ let settingsBtn = document.getElementById("settings-icon");
 let settings = document.getElementById("settings");
 let body = document.querySelector("body");
 let spinner = document.querySelector(".spinner");
+let alertBox = document.getElementById("alert-box");
 
 inputField.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
@@ -32,6 +33,7 @@ submitBtn.addEventListener("click", function () {
     if (city != "") {
         
         resCont.classList.remove("visible");
+        alertBox.classList.remove("visible");
         spinner.classList.add("visible");
         submitBtn.classList.add("collapsed");
         title.classList.remove("showing");
@@ -48,7 +50,12 @@ function fetchWeather(targetCity) {
     fetch(url)
         .then(response => response.json())
         .then(data => displayWeather(data))
-        .catch(error => console.log("Fetch error ", error));
+        .catch(error => {
+            console.log("Fetch error ", error);
+            alertBox.classList.add("visible");
+            spinner.classList.remove("visible");
+            submitBtn.classList.remove("collapsed");
+    });
 
 }
 
