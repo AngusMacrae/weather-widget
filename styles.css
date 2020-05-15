@@ -183,8 +183,7 @@ button:hover {
 
 .weather-container {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    grid-template-rows: 1.6fr 1fr;
+    grid-template: 1.6fr 1fr / 1.3fr 1fr;
     grid-row-gap: 1rem;
     grid-column-gap: 3rem;
     padding: 2rem;
@@ -327,8 +326,7 @@ button:hover {
 @media (max-width: 730px) {
 
     .weather-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: 0.9fr 1.7fr 1.1fr;
+        grid-template: 0.9fr 1.7fr 1.1fr / 1fr;
         grid-template-areas: 
             "a"
             "b"
@@ -358,6 +356,10 @@ button:hover {
 }
 
 @media (max-width: 606px) {
+    
+    h1.showing {
+        margin-top: 10vh;
+    }
 
     #display-box {
         width: 94%;
