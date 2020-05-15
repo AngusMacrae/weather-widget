@@ -46,7 +46,7 @@ function fetchWeather(targetCity) {
 
     fetch(url)
         .then(response => response.json())
-        .then(data => displayWeather(data))
+        .then(data => {displayWeather(data); console.log(data);})
         .catch(error => {
             console.log("Fetch error ", error);
             alertBox.classList.add("visible");
@@ -70,15 +70,20 @@ function displayWeather(weather) {
     let windSpeed = weather.wind.speed;
     let windDirection = weather.wind.deg;
     
-    let timezone = weather.timezone;
-    let sunriseTime = unixToHumanTime(weather.sys.sunrise);
-    let sunsetTime = unixToHumanTime(weather.sys.sunset);
-
-    let currentTime = new Date();
-    currentTime = unixToHumanTime(currentTime.getTime() - timezone);
+    let timezoneOffset = weather.timezone; // offset s from UTC
     
-    let long = weather.coord.lon;
-    let lat = weather.coord.lat;
+    let userTime = new Date();
+    let remoteTime = toRemoteTime(userTime, timezoneOffset);
+    let formattedRemoteTime = unixToHumanTime(remoteTime);
+
+    let sunriseTime = new Date((weather.sys.sunrise + userTime.getTimezoneOffset() * 60 + timezoneOffset) * 1000);
+    let formattedSunriseTime = formatHrsMins(sunriseTime);
+
+    let sunsetTime = new Date((weather.sys.sunset + userTime.getTimezoneOffset() * 60 + timezoneOffset) * 1000);
+    let formattedSunsetTime = formatHrsMins(sunsetTime);
+    
+//    let long = weather.coord.lon;
+//    let lat = weather.coord.lat;
     
     switch(true) {
             
@@ -127,20 +132,31 @@ function displayWeather(weather) {
         tempDisp.innerHTML = (Math.round(temp*10))/10 + " &deg;C";
         humidityDisp.innerHTML = humidity + "% humidity";
         windDisp.innerHTML = windDirection + " wind @ " + windSpeed + " m/s ";
-        currentTimeDisp.innerHTML = "The local time is " + currentTime;
-        sunriseTimeDisp.innerHTML = sunriseTime;
-        sunsetTimeDisp.innerHTML = sunsetTime;
+        currentTimeDisp.innerHTML = "The local time is " + formattedRemoteTime;
+        sunriseTimeDisp.innerHTML = formattedSunriseTime;
+        sunsetTimeDisp.innerHTML = formattedSunsetTime;
         
         resCont.classList.add("visible");
     }
 
 }
 
+function toRemoteTime(localTime, remoteOffset) {
+    
+    return localTime.getTime()/1000 + localTime.getTimezoneOffset() * 60 + remoteOffset;
+    
+}
+
+function formatHrsMins(inputDate) {
+    
+    return pad(inputDate.getHours(), 2) + ":" + pad(inputDate.getMinutes(), 2);
+    
+}
+
 function unixToHumanTime(unix) {
     
     let humanDate = new Date(unix * 1000);
-    let humanTime = pad(humanDate.getHours(), 2) + ":" + pad(humanDate.getMinutes(), 2);
-    return humanTime;
+    return formatHrsMins(humanDate);
     
 }
 
