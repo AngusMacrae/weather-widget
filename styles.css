@@ -332,6 +332,14 @@ button:hover {
 
 @media (max-width: 730px) {
 
-    /*    stack vertically */
+    .weather-container {
+/*        flex-direction: column;*/
+    }
 
+}
+
+@media (max-width: 620px) {
+    
+    
+    
 }
