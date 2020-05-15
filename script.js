@@ -42,7 +42,7 @@ submitBtn.addEventListener("click", function () {
 
 function fetchWeather(targetCity) {
 
-    let url = 'https://api.openweathermap.org/data/2.5/weather?q=' + targetCity + '&appid=e7034c9ccb454fc5547fec12cad8b5d4';
+    let url = 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=' + targetCity + '&appid=e7034c9ccb454fc5547fec12cad8b5d4';
 
     fetch(url)
         .then(response => response.json())
