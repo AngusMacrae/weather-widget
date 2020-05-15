@@ -157,6 +157,7 @@ button:hover {
 
     display: flex;
     width: 80%;
+    max-width: 640px;
     flex-direction: column;
     overflow-x: hidden;
     position: relative;
@@ -181,19 +182,39 @@ button:hover {
 }
 
 .weather-container {
-    display: flex;
-    padding: 2rem 0;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: 1.6fr 1fr;
+    grid-row-gap: 1rem;
+    grid-column-gap: 3rem;
+    padding: 2rem;
+    grid-template-areas: 
+        "a b"
+        "c b";
 }
 
-.weather-container > div {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+.weather-container svg {
+    width: 1.8rem;
+    margin-right: 1rem;
 }
 
-.weather-container > div div {
+#overview {
+    grid-area: a;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+#times {
+    grid-area: c;
+    text-align: center;
+}
+
+#details {
+    grid-area: b;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 #icon-img {
@@ -207,47 +228,20 @@ button:hover {
     font-weight: bold;
 }
 
-#left-col {
-    margin-right: 6vw;
-    margin-left: 2vw;
-}
-
-#left-upper {
-    justify-content: center;
-}
-
-#left-lower {
-    display: block;
-    margin-top: auto;
-    padding: 0 1.5rem;
-}
-
-#left-lower p {
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
 #suntimes {
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
 }
 
-#suntimes div,
-#right-col div {
-    height: 2rem;
-}
-
-#suntimes div + div {
+#suntimes span + svg {
     margin-left: 3rem;
 }
 
-.weather-container svg {
-    width: 1.8rem;
-    margin-right: 1rem;
-}
-
-#right-col div + div {
-    margin-top: 1rem;
+#details div {
+    display: flex;
+    align-items: center;
 }
 
 #settings-container {
@@ -333,13 +327,56 @@ button:hover {
 @media (max-width: 730px) {
 
     .weather-container {
-/*        flex-direction: column;*/
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.9fr 1.7fr 1.1fr;
+        grid-template-areas: 
+            "a"
+            "b"
+            "c";
+        padding: 1rem 0;
+    }
+
+    #times {
+        align-self: center;
+    }
+
+    #details {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #details div {
+        width: 12em;
+        margin-left: 10%;
+    }
+
+    h1.showing {
+        margin-top: 15vh;
     }
 
 }
 
-@media (max-width: 620px) {
-    
-    
-    
+@media (max-width: 606px) {
+
+    #display-box {
+        width: 94%;
+    }
+
+}
+
+@media (max-width: 530px) {
+
+    #details div {
+        margin-left: 5%;
+    }
+
+}
+
+@media (max-width: 486px) {
+
+    #details div {
+        margin-left: 0;
+    }
+
 }
