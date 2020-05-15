@@ -360,7 +360,7 @@ button:hover {
 @media (max-width: 640px) {
     
     h1.showing {
-        margin-top: 10vh;
+        margin-top: 5vh;
     }
 
     #display-box {
