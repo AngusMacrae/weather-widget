@@ -177,6 +177,9 @@ function displayWeather(weather) {
             updateResultsUnits();
         }
 
+        inputField.blur();
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         resCont.classList.add("visible");
     }
 
