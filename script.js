@@ -1,7 +1,7 @@
 const $pageTitle = document.querySelector('.page-title');
 const $cityInput = document.getElementById('city-input');
 const $submitBtn = document.getElementById('submit-btn');
-const $loadingSpinner = document.querySelector('.loading-spinner');
+const $workingSpinner = document.querySelector('.working-spinner');
 const $resultsNotFound = document.getElementById('results-not-found');
 const $resultsContainer = document.getElementById('results-container');
 const $resultsTitle = document.querySelector('.results-title');
@@ -26,13 +26,13 @@ const pageState = {
   displayWorking() {
     $resultsContainer.classList.remove('visible');
     $resultsNotFound.classList.remove('visible');
-    $loadingSpinner.classList.add('visible');
+    $workingSpinner.classList.add('visible');
     $submitBtn.classList.add('collapsed');
     $pageTitle.classList.remove('content-showing');
   },
   displayResults() {
     $pageTitle.classList.add('content-showing');
-    $loadingSpinner.classList.remove('visible');
+    $workingSpinner.classList.remove('visible');
     $submitBtn.classList.remove('collapsed');
     $cityInput.blur();
     document.body.scrollTop = 0;
@@ -41,7 +41,7 @@ const pageState = {
   },
   displayNotFound() {
     $resultsNotFound.classList.add('visible');
-    $loadingSpinner.classList.remove('visible');
+    $workingSpinner.classList.remove('visible');
     $submitBtn.classList.remove('collapsed');
   },
 };
