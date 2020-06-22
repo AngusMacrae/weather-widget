@@ -1,76 +1,79 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>What's the Weather?</title>
-    <link rel="icon" href="img/favicon.svg" type="image/svg">
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="icon" href="img/favicon.svg" type="image/svg" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
 
-</head>
+  <body>
+    <div id="page-container">
+      <h1 class="page-title">What's the Weather?</h1>
+      <form>
+        <input id="city-input" type="text" placeholder="E.g. London, UK" autofocus />
+        <button id="submit-btn">Go!</button>
+      </form>
 
-<body>
-    <div id="main-container">
-        <h1>What's the Weather?</h1>
-        <div id="input-container">
-            <input id="input" type="text" placeholder="E.g. London, UK" autofocus>
-            <button id="submit">Go!</button>
-        </div>
-        <div class="spinner"></div>
-        <div class="box" id="alert-box">City not found.</div>
-        <div class="box" id="display-box">
-            <div id="heading-container">
-                <h3 id="heading_disp"></h3>
-                <div id="settings-wrapper">
-                    <img id="settings-icon" src="img/settings.svg">
-                    <div id="settings-panel">
-                        <h4>Settings</h4>
-                        <label class="label" for="mi-toggle">
-                            <span>Metric</span>
-                            <input type="checkbox" id="mi-toggle">
-                            <div class="toggle"></div>
-                            <span>Imperial</span>
-                        </label>
-                    </div>
-                </div>
+      <div class="loading-spinner"></div>
+
+      <div class="results-box" id="results-not-found">City not found.</div>
+
+      <div class="results-box" id="results-container">
+        <header id="results-header">
+          <h2 class="results-title"></h2>
+          <div id="settings-wrapper">
+            <img id="settings-icon" src="img/settings.svg" />
+            <div id="settings-panel">
+              <h3>Settings</h3>
+              <label for="units-toggle">
+                <span>Metric</span>
+                <input type="checkbox" class="checkbox-hidden" id="units-toggle" />
+                <div class="toggle-pill"></div>
+                <span>Imperial</span>
+              </label>
             </div>
-            <div class="weather-container">
-                <div id="overview">
-                    <img id="icon-img">
-                    <span id="desc_disp"></span>
-                </div>
-                <div id="times">
-                    <span id="currentTime_disp"></span>
-                    <div id="suntimes">
-                        <img src="img/sunrise.svg">
-                        <span id="sunrise_disp"></span>
-                        <img src="img/sunset.svg">
-                        <span id="sunset_disp"></span>
-                    </div>
-                </div>
-                <div id="details">
-                    <div>
-                        <img src="img/temperature.svg">
-                        <span id="temp_disp"></span>
-                    </div>
-                    <div>
-                        <img src="img/cloud-cover.svg">
-                        <span id="clouds_disp"></span>
-                    </div>
-                    <div>
-                        <img src="img/humidity.svg">
-                        <span id="humidity_disp"></span>
-                    </div>
-                    <div>
-                        <img src="img/wind.svg">
-                        <span id="wind_disp"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script src="script.js"></script>
-</body>
+          </div>
+        </header>
 
+        <div id="results-body">
+          <section id="results-overview">
+            <img id="icon-main" />
+            <span id="description"></span>
+          </section>
+
+          <section id="results-times">
+            <span id="current-time"></span>
+            <div id="suntimes-container">
+              <img class="icon-inline" src="img/sunrise.svg" />
+              <span id="sunrise-time"></span>
+              <img class="icon-inline" src="img/sunset.svg" />
+              <span id="sunset-time"></span>
+            </div>
+          </section>
+
+          <section id="results-conditions">
+            <div class="condition-wrapper">
+              <img class="icon-inline" src="img/temperature.svg" />
+              <span id="temperature"></span>
+            </div>
+            <div class="condition-wrapper">
+              <img class="icon-inline" src="img/cloud-cover.svg" />
+              <span id="cloud-cover"></span>
+            </div>
+            <div class="condition-wrapper">
+              <img class="icon-inline" src="img/humidity.svg" />
+              <span id="humidity"></span>
+            </div>
+            <div class="condition-wrapper">
+              <img class="icon-inline" src="img/wind.svg" />
+              <span id="wind"></span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>

@@ -1,48 +1,49 @@
-const title = document.querySelector('h1');
-const submitBtn = document.getElementById('submit');
-const inputField = document.getElementById('input');
-const headingDisp = document.getElementById('heading_disp');
-const iconImg = document.getElementById('icon-img');
-const descDisp = document.getElementById('desc_disp');
-const currentTimeDisp = document.getElementById('currentTime_disp');
-const cloudsDisp = document.getElementById('clouds_disp');
-const tempDisp = document.getElementById('temp_disp');
-const humidityDisp = document.getElementById('humidity_disp');
-const windDisp = document.getElementById('wind_disp');
-const sunriseTimeDisp = document.getElementById('sunrise_disp');
-const sunsetTimeDisp = document.getElementById('sunset_disp');
-const resCont = document.getElementById('display-box');
-const body = document.querySelector('body');
-const spinner = document.querySelector('.spinner');
-const alertBox = document.getElementById('alert-box');
-const miToggle = document.getElementById('mi-toggle');
+const title = document.querySelector('.page-title');
+const cityInputBox = document.getElementById('city-input');
+const submitBtn = document.getElementById('submit-btn');
+const spinner = document.querySelector('.loading-spinner');
+const resultsNotFound = document.getElementById('results-not-found');
+const resultsContainer = document.getElementById('results-container');
+const headingDisp = document.querySelector('.results-title');
+const weatherIcon = document.getElementById('icon-main');
+const descDisp = document.getElementById('description');
+const currentTimeDisp = document.getElementById('current-time');
+const sunriseTimeDisp = document.getElementById('sunrise-time');
+const sunsetTimeDisp = document.getElementById('sunset-time');
+const tempDisp = document.getElementById('temperature');
+const cloudsDisp = document.getElementById('cloud-cover');
+const humidityDisp = document.getElementById('humidity');
+const windDisp = document.getElementById('wind');
+const page = document.querySelector('body');
+const unitsToggle = document.getElementById('units-toggle');
 
-let units = 0;
 let temp = 0;
 let windSpeed = 0;
 let windDirection = 0;
+let units = 0;
 
-inputField.addEventListener('keyup', function (event) {
+cityInputBox.addEventListener('keyup', function (event) {
   if (event.keyCode === 13) {
     event.preventDefault();
     submitBtn.click();
   }
 });
 
-submitBtn.addEventListener('click', function () {
-  let city = inputField.value;
+submitBtn.addEventListener('click', function (e) {
+  e.preventDefault();
+  let city = cityInputBox.value;
 
   if (city != '') {
-    resCont.classList.remove('visible');
-    alertBox.classList.remove('visible');
+    resultsContainer.classList.remove('visible');
+    resultsNotFound.classList.remove('visible');
     spinner.classList.add('visible');
     submitBtn.classList.add('collapsed');
-    title.classList.remove('showing');
+    title.classList.remove('content-showing');
     fetchWeather(city);
   }
 });
 
-miToggle.addEventListener('change', function () {
+unitsToggle.addEventListener('change', function () {
   if (this.checked) {
     units = 1;
   } else {
@@ -73,7 +74,7 @@ function fetchWeather(targetCity) {
     })
     .catch(error => {
       console.log('Fetch error ', error);
-      alertBox.classList.add('visible');
+      resultsNotFound.classList.add('visible');
       spinner.classList.remove('visible');
       submitBtn.classList.remove('collapsed');
     });
@@ -139,13 +140,13 @@ function displayWeather(weather) {
   let bgImg = new Image();
   bgImg.src = url;
   bgImg.onload = function () {
-    title.classList.add('showing');
+    title.classList.add('content-showing');
     spinner.classList.remove('visible');
     submitBtn.classList.remove('collapsed');
 
-    body.style.backgroundImage = 'url(' + bgImg.src + ')';
+    page.style.backgroundImage = 'url(' + bgImg.src + ')';
     headingDisp.innerHTML = 'Current weather in ' + city + ', ' + country;
-    iconImg.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
+    weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
     descDisp.innerHTML = desc.charAt(0).toUpperCase() + desc.substr(1);
     cloudsDisp.innerHTML = clouds + '% cloud cover';
     tempDisp.innerHTML = Math.round(temp * 10) / 10 + ' &deg;C';
@@ -159,10 +160,10 @@ function displayWeather(weather) {
       updateResultsUnits();
     }
 
-    inputField.blur();
+    cityInputBox.blur();
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    resCont.classList.add('visible');
+    resultsContainer.classList.add('visible');
   };
 }
 

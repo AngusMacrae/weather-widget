@@ -1,3 +1,5 @@
+/* RESET */
+
 *,
 *:before,
 *:after {
@@ -28,9 +30,9 @@ ol[class] {
 }
 
 img {
+  display: block;
   max-width: 100%;
   height: auto;
-  display: block;
 }
 
 input,
@@ -48,29 +50,46 @@ select {
   }
 }
 
-/***************************************/
+/* TYPOGRAPHY */
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
 
 body {
+  font-family: sans-serif;
+}
+
+/* STYLES */
+
+body {
+  padding: 0 1rem;
+  color: white;
   background: url(img/clouds-background.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  color: white;
-  font-family: sans-serif;
   transition: background-image 0.5s ease-in-out;
-  padding: 0 1rem;
 }
 
-#main-container {
-  margin: 0 auto;
-  max-width: 900px;
-  min-height: 100vh;
+#page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 900px;
+  min-height: 100vh;
+  margin: 0 auto;
 }
 
-h1 {
+.page-title {
   margin-top: 30vh;
   margin-bottom: 1rem;
   text-align: center;
@@ -78,49 +97,49 @@ h1 {
   transition: margin-top 0.4s ease-in-out;
 }
 
-h1.showing {
+.page-title.content-showing {
   margin-top: 25vh;
 }
 
-#input,
-button {
-  border-radius: 0.1rem;
+#city-input,
+#submit-btn {
   padding: 0.5rem 1rem;
-  border: none;
   color: #404040;
+  border: none;
+  border-radius: 0.1rem;
   box-shadow: 0px 1px 9px -1px #000000;
 }
 
-#input {
+#city-input {
   background-color: rgba(255, 255, 255, 0.9);
   transition: backround-color 0.2s;
 }
 
-#input:focus {
+#city-input:focus {
   background-color: rgba(255, 255, 255, 1);
 }
 
-button {
-  background-color: hsl(60, 100%, 50%);
-  cursor: pointer;
-  position: relative;
+#submit-btn {
   padding: 0.5rem 0;
   width: 4rem;
+  background-color: hsl(60, 100%, 50%);
+  position: relative;
+  cursor: pointer;
   opacity: 1;
   transition: width 0.4s 0.8s, opacity 0.3s 0.9s;
 }
 
-button.collapsed {
+#submit-btn.collapsed {
   width: 0;
   opacity: 0;
   transition: width 0.4s, opacity 0.3s;
 }
 
-button:hover {
+#submit-btn:hover {
   background-color: hsl(60, 100%, 40%);
 }
 
-.spinner {
+.loading-spinner {
   display: none;
   margin-top: 2rem;
   width: 32px;
@@ -128,10 +147,14 @@ button:hover {
   border: 4px rgba(137, 137, 137, 0.7) solid;
   border-top: 4px white solid;
   border-radius: 50%;
-  animation: spCircRot 0.6s infinite linear;
+  animation: spin 0.6s infinite linear;
 }
 
-@keyframes spCircRot {
+.loading-spinner.visible {
+  display: block;
+}
+
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }
@@ -141,113 +164,109 @@ button:hover {
   }
 }
 
-.spinner.visible {
-  display: block;
-}
-
-.box {
-  opacity: 0;
+.results-box {
   display: none;
+  opacity: 0;
   margin: 2rem auto 0;
+  padding: 1rem 1.5rem;
   color: #404040;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 0.1rem;
-  padding: 1rem 1.5rem;
   box-shadow: 0px 1px 9px -1px #000000;
 }
 
-#display-box {
-  display: flex;
-  width: 80%;
-  max-width: 640px;
-  flex-direction: column;
-  overflow-x: hidden;
-  position: relative;
-  top: -4rem;
-  transform: scale(0.4);
-}
-
-#heading-container {
-  display: flex;
-}
-
-.box.visible {
+.results-box.visible {
   display: block;
   opacity: 1;
 }
 
-#display-box.visible {
-  transform: scale(1);
+#results-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: -4rem;
+  width: 80%;
+  max-width: 640px;
+  overflow-x: hidden;
+  transform: scale(0.4);
+}
+
+#results-container.visible {
   top: 0;
+  transform: scale(1);
   transition: opacity 0.7s 0.1s, transform 0.8s, top 0.8s;
 }
 
-.weather-container {
+#results-header {
+  display: flex;
+}
+
+#results-body {
   display: grid;
   grid-template: 1.6fr 1fr / 1.3fr 1fr;
   grid-row-gap: 1rem;
   grid-column-gap: 3rem;
-  padding: 2rem;
   grid-template-areas:
     'a b'
     'c b';
+  padding: 2rem;
 }
 
-.weather-container img {
-  width: 1.8rem;
-  margin-right: 1rem;
-}
-
-#overview {
+#results-overview {
   grid-area: a;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
-#times {
+#results-times {
   grid-area: c;
   text-align: center;
 }
 
-#details {
+#results-conditions {
   grid-area: b;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-#icon-img {
+.condition-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+#icon-main {
   width: 6em;
   height: auto;
+  margin-right: 1rem;
   filter: drop-shadow(0 0 1px #8d8d8d);
+}
+
+.icon-inline {
+  width: 1.8rem;
   margin-right: 1rem;
 }
 
-#desc_disp {
+#description {
   font-weight: bold;
 }
 
-#suntimes {
+#suntimes-container {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 1.5rem;
 }
 
-#suntimes span + img {
+#suntimes-container .icon-inline:last-of-type {
   margin-left: 3rem;
 }
 
-#details div {
-  display: flex;
-  align-items: center;
-}
-
 #settings-wrapper {
-  margin-left: auto;
   display: flex;
   align-items: center;
+  margin-left: auto;
 }
 
 #settings-icon {
@@ -267,13 +286,13 @@ button:hover {
   display: inline-block;
   position: absolute;
   right: -225px;
-  background-color: white;
-  opacity: 0;
   top: 0;
   bottom: 0;
-  transition: right 0.35s ease-in-out, opacity 0.23s ease-in-out;
-  box-shadow: 0px 1px 9px -1px #000000;
   padding: 1rem 1.5rem;
+  background-color: white;
+  box-shadow: 0px 1px 9px -1px #000000;
+  opacity: 0;
+  transition: right 0.35s ease-in-out, opacity 0.23s ease-in-out;
 }
 
 #settings-wrapper:hover #settings-panel {
@@ -286,17 +305,17 @@ button:hover {
 }
 
 #settings-panel label {
-  margin-left: auto;
   display: flex;
   align-items: center;
+  margin-left: auto;
   cursor: pointer;
 }
 
-.label input {
+.checkbox-hidden {
   display: none;
 }
 
-.label div {
+.toggle-pill {
   width: 2rem;
   height: 1.1rem;
   background-color: #404040;
@@ -305,7 +324,7 @@ button:hover {
   position: relative;
 }
 
-#mi-toggle + div::after {
+.toggle-pill::after {
   content: '';
   width: 0.9rem;
   height: 0.9rem;
@@ -317,12 +336,12 @@ button:hover {
   transition: left 0.2s ease-out;
 }
 
-#mi-toggle:checked + div::after {
+:checked + .toggle-pill::after {
   left: 1rem;
 }
 
 @media (max-width: 730px) {
-  .weather-container {
+  #results-body {
     grid-template: 0.9fr 1.7fr 1.1fr / 1fr;
     grid-template-areas:
       'a'
@@ -331,44 +350,44 @@ button:hover {
     padding: 1rem 0;
   }
 
-  #times {
+  #results-times {
     align-self: center;
   }
 
-  #details {
+  #results-conditions {
     display: grid;
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
   }
 
-  #details div {
+  .condition-wrapper {
     width: 12em;
     margin-left: 10%;
   }
 
-  h1.showing {
+  .page-title.content-showing {
     margin-top: 15vh;
   }
 }
 
 @media (max-width: 640px) {
-  h1.showing {
+  .page-title.content-showing {
     margin-top: 5vh;
   }
 
-  #display-box {
+  #results-container {
     width: 100%;
   }
 }
 
 @media (max-width: 530px) {
-  #details div {
+  .condition-wrapper {
     margin-left: 5%;
   }
 }
 
 @media (max-width: 486px) {
-  #details div {
+  .condition-wrapper {
     width: auto;
   }
 }
