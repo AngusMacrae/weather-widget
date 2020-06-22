@@ -1,82 +1,83 @@
-const title = document.querySelector('.page-title');
-const cityInputBox = document.getElementById('city-input');
-const submitBtn = document.getElementById('submit-btn');
-const spinner = document.querySelector('.loading-spinner');
-const resultsNotFound = document.getElementById('results-not-found');
-const resultsContainer = document.getElementById('results-container');
-const headingDisp = document.querySelector('.results-title');
-const weatherIcon = document.getElementById('icon-main');
-const descDisp = document.getElementById('description');
-const currentTimeDisp = document.getElementById('current-time');
-const sunriseTimeDisp = document.getElementById('sunrise-time');
-const sunsetTimeDisp = document.getElementById('sunset-time');
-const tempDisp = document.getElementById('temperature');
-const cloudsDisp = document.getElementById('cloud-cover');
-const humidityDisp = document.getElementById('humidity');
-const windDisp = document.getElementById('wind');
-const page = document.querySelector('body');
-const unitsToggle = document.getElementById('units-toggle');
+const $pageTitle = document.querySelector('.page-title');
+const $cityInput = document.getElementById('city-input');
+const $submitBtn = document.getElementById('submit-btn');
+const $loadingSpinner = document.querySelector('.loading-spinner');
+const $resultsNotFound = document.getElementById('results-not-found');
+const $resultsContainer = document.getElementById('results-container');
+const $resultsTitle = document.querySelector('.results-title');
+const $weatherIcon = document.getElementById('icon-main');
+const $description = document.getElementById('description');
+const $currentTime = document.getElementById('current-time');
+const $sunriseTime = document.getElementById('sunrise-time');
+const $sunsetTime = document.getElementById('sunset-time');
+const $temperature = document.getElementById('temperature');
+const $cloudCover = document.getElementById('cloud-cover');
+const $humidity = document.getElementById('humidity');
+const $wind = document.getElementById('wind');
+const $page = document.querySelector('body');
+const $unitsToggle = document.getElementById('units-toggle');
 
-let temp = 0;
+let temperature = 0;
 let windSpeed = 0;
 let windDirection = 0;
-let units = 0;
+let useImperialUnits = false;
 
-cityInputBox.addEventListener('keyup', function (event) {
+$cityInput.addEventListener('keyup', function (event) {
+  // if Enter key is pressed
   if (event.keyCode === 13) {
     event.preventDefault();
-    submitBtn.click();
+    $submitBtn.click();
   }
 });
 
-submitBtn.addEventListener('click', function (e) {
+$submitBtn.addEventListener('click', function (e) {
   e.preventDefault();
-  let city = cityInputBox.value;
+  const inputCity = $cityInput.value;
 
-  if (city != '') {
-    resultsContainer.classList.remove('visible');
-    resultsNotFound.classList.remove('visible');
-    spinner.classList.add('visible');
-    submitBtn.classList.add('collapsed');
-    title.classList.remove('content-showing');
-    fetchWeather(city);
+  if (inputCity != '') {
+    $resultsContainer.classList.remove('visible');
+    $resultsNotFound.classList.remove('visible');
+    $loadingSpinner.classList.add('visible');
+    $submitBtn.classList.add('collapsed');
+    $pageTitle.classList.remove('content-showing');
+    fetchCityWeather(inputCity);
   }
 });
 
-unitsToggle.addEventListener('change', function () {
+$unitsToggle.addEventListener('change', function () {
   if (this.checked) {
-    units = 1;
+    useImperialUnits = true;
   } else {
-    units = 0;
+    useImperialUnits = false;
   }
 
   updateResultsUnits();
 });
 
 function updateResultsUnits() {
-  if (units == 1) {
-    tempDisp.innerHTML = Math.round(((temp * 9) / 5 + 32) * 10) / 10 + ' &deg;F';
-    windDisp.innerHTML = windDirection + ' wind @ ' + Math.round(windSpeed * 2.237 * 10) / 10 + ' mph';
+  if (useImperialUnits == true) {
+    $temperature.innerHTML = Math.round(((temperature * 9) / 5 + 32) * 10) / 10 + ' &deg;F';
+    $wind.innerHTML = windDirection + ' wind @ ' + Math.round(windSpeed * 2.237 * 10) / 10 + ' mph';
   } else {
-    tempDisp.innerHTML = Math.round(temp * 10) / 10 + ' &deg;C';
-    windDisp.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
+    $temperature.innerHTML = Math.round(temperature * 10) / 10 + ' &deg;C';
+    $wind.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
   }
 }
 
-function fetchWeather(targetCity) {
-  let url = 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=' + targetCity + '&appid=e7034c9ccb454fc5547fec12cad8b5d4';
+function fetchCityWeather(targetCity) {
+  const weatherURL = 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=' + targetCity + '&appid=e7034c9ccb454fc5547fec12cad8b5d4';
 
-  fetch(url)
+  fetch(weatherURL)
     .then(response => response.json())
     .then(data => {
-      displayWeather(data);
       console.log(data);
+      displayWeather(data);
     })
     .catch(error => {
       console.log('Fetch error ', error);
-      resultsNotFound.classList.add('visible');
-      spinner.classList.remove('visible');
-      submitBtn.classList.remove('collapsed');
+      $resultsNotFound.classList.add('visible');
+      $loadingSpinner.classList.remove('visible');
+      $submitBtn.classList.remove('collapsed');
     });
 }
 
@@ -87,15 +88,12 @@ function displayWeather(weather) {
   let desc = weather.weather[0].description;
   let icon = weather.weather[0].icon;
   let clouds = weather.clouds.all;
-  temp = weather.main.temp - 273.15;
-  //   let tempFeels = weather.main.temp.feels_like - 273.15;
+  temperature = weather.main.temp - 273.15;
   let humidity = weather.main.humidity;
   windSpeed = weather.wind.speed;
   windDirection = weather.wind.deg;
-  //    let long = weather.coord.lon;
-  //    let lat = weather.coord.lat;
 
-  let timezoneOffset = weather.timezone; // offset s from UTC
+  let timezoneOffset = weather.timezone; // offset from UTC in s
 
   let userTime = new Date();
   let remoteTime = toRemoteTime(userTime, timezoneOffset);
@@ -136,34 +134,34 @@ function displayWeather(weather) {
       windDirection = 'N';
   }
 
-  let url = 'https://source.unsplash.com/1600x900/?' + city + '%20' + main;
+  const imageURL = 'https://source.unsplash.com/1600x900/?' + city + '%20' + main;
   let bgImg = new Image();
-  bgImg.src = url;
+  bgImg.src = imageURL;
   bgImg.onload = function () {
-    title.classList.add('content-showing');
-    spinner.classList.remove('visible');
-    submitBtn.classList.remove('collapsed');
+    $pageTitle.classList.add('content-showing');
+    $loadingSpinner.classList.remove('visible');
+    $submitBtn.classList.remove('collapsed');
 
-    page.style.backgroundImage = 'url(' + bgImg.src + ')';
-    headingDisp.innerHTML = 'Current weather in ' + city + ', ' + country;
-    weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
-    descDisp.innerHTML = desc.charAt(0).toUpperCase() + desc.substr(1);
-    cloudsDisp.innerHTML = clouds + '% cloud cover';
-    tempDisp.innerHTML = Math.round(temp * 10) / 10 + ' &deg;C';
-    humidityDisp.innerHTML = humidity + '% humidity';
-    windDisp.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
-    currentTimeDisp.innerHTML = 'The local time is ' + formattedRemoteTime;
-    sunriseTimeDisp.innerHTML = formattedSunriseTime;
-    sunsetTimeDisp.innerHTML = formattedSunsetTime;
+    $page.style.backgroundImage = 'url(' + bgImg.src + ')';
+    $resultsTitle.innerHTML = 'Current weather in ' + city + ', ' + country;
+    $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
+    $description.innerHTML = desc.charAt(0).toUpperCase() + desc.substr(1);
+    $cloudCover.innerHTML = clouds + '% cloud cover';
+    $temperature.innerHTML = Math.round(temperature * 10) / 10 + ' &deg;C';
+    $humidity.innerHTML = humidity + '% humidity';
+    $wind.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
+    $currentTime.innerHTML = 'The local time is ' + formattedRemoteTime;
+    $sunriseTime.innerHTML = formattedSunriseTime;
+    $sunsetTime.innerHTML = formattedSunsetTime;
 
-    if (units == 1) {
+    if (useImperialUnits == true) {
       updateResultsUnits();
     }
 
-    cityInputBox.blur();
+    $cityInput.blur();
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
-    resultsContainer.classList.add('visible');
+    $resultsContainer.classList.add('visible');
   };
 }
 
