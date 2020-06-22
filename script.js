@@ -22,6 +22,30 @@ let windSpeed = 0;
 let windDirection = 0;
 let useImperialUnits = false;
 
+const pageState = {
+  displayWorking() {
+    $resultsContainer.classList.remove('visible');
+    $resultsNotFound.classList.remove('visible');
+    $loadingSpinner.classList.add('visible');
+    $submitBtn.classList.add('collapsed');
+    $pageTitle.classList.remove('content-showing');
+  },
+  displayResults() {
+    $pageTitle.classList.add('content-showing');
+    $loadingSpinner.classList.remove('visible');
+    $submitBtn.classList.remove('collapsed');
+    $cityInput.blur();
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+    $resultsContainer.classList.add('visible');
+  },
+  displayNotFound() {
+    $resultsNotFound.classList.add('visible');
+    $loadingSpinner.classList.remove('visible');
+    $submitBtn.classList.remove('collapsed');
+  },
+};
+
 $cityInput.addEventListener('keyup', function (event) {
   // if Enter key is pressed
   if (event.keyCode === 13) {
@@ -35,11 +59,7 @@ $submitBtn.addEventListener('click', function (e) {
   const inputCity = $cityInput.value;
 
   if (inputCity != '') {
-    $resultsContainer.classList.remove('visible');
-    $resultsNotFound.classList.remove('visible');
-    $loadingSpinner.classList.add('visible');
-    $submitBtn.classList.add('collapsed');
-    $pageTitle.classList.remove('content-showing');
+    pageState.displayWorking();
     fetchCityWeather(inputCity).then(weatherData => displayWeather(weatherData));
   }
 });
@@ -109,10 +129,6 @@ function displayWeather(weather) {
   let bgImg = new Image();
   bgImg.src = imageURL;
   bgImg.onload = function () {
-    $pageTitle.classList.add('content-showing');
-    $loadingSpinner.classList.remove('visible');
-    $submitBtn.classList.remove('collapsed');
-
     $page.style.backgroundImage = 'url(' + bgImg.src + ')';
     $resultsTitle.innerHTML = 'Current weather in ' + city + ', ' + country;
     $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
@@ -128,11 +144,7 @@ function displayWeather(weather) {
     if (useImperialUnits == true) {
       updateResultsUnits();
     }
-
-    $cityInput.blur();
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-    $resultsContainer.classList.add('visible');
+    pageState.displayResults();
   };
 }
 
