@@ -53,8 +53,8 @@ $cityInput.addEventListener('keyup', function (event) {
   }
 });
 
-$submitBtn.addEventListener('click', function (e) {
-  e.preventDefault();
+$submitBtn.addEventListener('click', function (event) {
+  event.preventDefault();
   const inputCity = $cityInput.value;
 
   if (inputCity != '') {
@@ -68,13 +68,20 @@ $unitsToggle.addEventListener('change', function () {
 });
 
 function displayTempAndWindSpeed(useImperialUnits) {
-  if (useImperialUnits == true) {
-    $temperature.textContent = Math.round(((metricTemperature * 9) / 5 + 32) * 10) / 10 + ' \u00B0F';
-    $wind.textContent = windDirection + ' wind @ ' + Math.round(metricWindSpeed * 2.237 * 10) / 10 + ' mph';
+  let displayedTemp, tempUnit, displayedWindSpeed, windSpeedUnit;
+  if (useImperialUnits == false) {
+    displayedTemp = metricTemperature;
+    tempUnit = '\u00B0C';
+    displayedWindSpeed = metricWindSpeed;
+    windSpeedUnit = 'm/s';
   } else {
-    $temperature.textContent = Math.round(metricTemperature * 10) / 10 + ' \u00B0C';
-    $wind.textContent = windDirection + ' wind @ ' + metricWindSpeed + ' m/s';
+    displayedTemp = (metricTemperature * 9) / 5 + 32;
+    tempUnit = '\u00B0F';
+    displayedWindSpeed = metricWindSpeed * 2.237;
+    windSpeedUnit = 'mph';
   }
+  $temperature.textContent = `${displayedTemp.toFixed(1)} ${tempUnit}`;
+  $wind.textContent = `${windDirection} wind @ ${displayedWindSpeed.toFixed(1)} ${windSpeedUnit}`;
 }
 
 function fetchCityWeather(targetCity) {
@@ -100,7 +107,7 @@ function displayWeather(weather) {
   metricTemperature = weather.main.temp - 273.15;
   metricWindSpeed = weather.wind.speed;
   // some cities' weather stations do not seem to provide wind direction data
-  windDirection = angleToCompassPoint(weather.wind.deg);
+  windDirection = bearingToCompassPoint(weather.wind.deg);
 
   let timezoneOffset = weather.timezone; // offset from UTC in s
 
@@ -132,21 +139,21 @@ function displayWeather(weather) {
   };
 }
 
-function angleToCompassPoint(angle) {
+function bearingToCompassPoint(bearing) {
   switch (true) {
-    case angle >= 22.5 && angle < 67.5:
+    case bearing >= 22.5 && bearing < 67.5:
       return 'NE';
-    case angle >= 67.5 && angle < 112.5:
+    case bearing >= 67.5 && bearing < 112.5:
       return 'E';
-    case angle >= 112.5 && angle < 157.5:
+    case bearing >= 112.5 && bearing < 157.5:
       return 'SE';
-    case angle >= 157.5 && angle < 202.5:
+    case bearing >= 157.5 && bearing < 202.5:
       return 'S';
-    case angle >= 202.5 && angle < 247.5:
+    case bearing >= 202.5 && bearing < 247.5:
       return 'SW';
-    case angle >= 247.5 && angle < 292.5:
+    case bearing >= 247.5 && bearing < 292.5:
       return 'W';
-    case angle >= 292.5 && angle < 337.5:
+    case bearing >= 292.5 && bearing < 337.5:
       return 'NW';
     default:
       return 'N';
@@ -158,7 +165,7 @@ function toRemoteTime(localTime, remoteOffset) {
 }
 
 function formatHrsMins(inputDate) {
-  return pad(inputDate.getHours(), 2) + ':' + pad(inputDate.getMinutes(), 2);
+  return padInitialZeros(inputDate.getHours(), 2) + ':' + padInitialZeros(inputDate.getMinutes(), 2);
 }
 
 function unixToHumanTime(unix) {
@@ -166,13 +173,13 @@ function unixToHumanTime(unix) {
   return formatHrsMins(humanDate);
 }
 
-function pad(number, length) {
-  var str = '' + number;
-  while (str.length < length) {
-    str = '0' + str;
+function padInitialZeros(number, targetLength) {
+  number = '' + number; // convert to string
+  while (number.length < targetLength) {
+    number = '0' + number;
   }
 
-  return str;
+  return number;
 }
 
 function toTitleCase(str) {
