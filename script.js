@@ -17,10 +17,9 @@ const $wind = document.getElementById('wind');
 const $page = document.querySelector('body');
 const $unitsToggle = document.getElementById('units-toggle');
 
-let temperature = 0;
-let windSpeed = 0;
-let windDirection = 0;
-// let useImperialUnits = false;
+let metricTemperature = 0;
+let metricWindSpeed = 0;
+let windDirection;
 
 const pageState = {
   displayWorking() {
@@ -65,16 +64,16 @@ $submitBtn.addEventListener('click', function (e) {
 });
 
 $unitsToggle.addEventListener('change', function () {
-  updateResultsUnits(this.checked);
+  displayTempAndWindSpeed(this.checked);
 });
 
-function updateResultsUnits(useImperialUnits = false) {
+function displayTempAndWindSpeed(useImperialUnits) {
   if (useImperialUnits == true) {
-    $temperature.innerHTML = Math.round(((temperature * 9) / 5 + 32) * 10) / 10 + ' &deg;F';
-    $wind.innerHTML = windDirection + ' wind @ ' + Math.round(windSpeed * 2.237 * 10) / 10 + ' mph';
+    $temperature.innerHTML = Math.round(((metricTemperature * 9) / 5 + 32) * 10) / 10 + ' &deg;F';
+    $wind.innerHTML = windDirection + ' wind @ ' + Math.round(metricWindSpeed * 2.237 * 10) / 10 + ' mph';
   } else {
-    $temperature.innerHTML = Math.round(temperature * 10) / 10 + ' &deg;C';
-    $wind.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
+    $temperature.innerHTML = Math.round(metricTemperature * 10) / 10 + ' &deg;C';
+    $wind.innerHTML = windDirection + ' wind @ ' + metricWindSpeed + ' m/s';
   }
 }
 
@@ -98,8 +97,8 @@ function displayWeather(weather) {
   let cloudCover = weather.clouds.all;
   let humidity = weather.main.humidity;
 
-  temperature = weather.main.temp - 273.15;
-  windSpeed = weather.wind.speed;
+  metricTemperature = weather.main.temp - 273.15;
+  metricWindSpeed = weather.wind.speed;
   // some cities' weather stations do not seem to provide wind direction data
   windDirection = angleToCompassPoint(weather.wind.deg);
 
@@ -123,15 +122,12 @@ function displayWeather(weather) {
     $resultsTitle.innerHTML = 'Current weather in ' + city + ', ' + country;
     $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
     $description.innerHTML = description.charAt(0).toUpperCase() + description.substr(1);
-    $temperature.innerHTML = Math.round(temperature * 10) / 10 + ' &deg;C';
-    $cloudCover.innerHTML = cloudCover + '% cloud cover';
-    $humidity.innerHTML = humidity + '% humidity';
-    $wind.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
     $currentTime.innerHTML = 'The local time is ' + formattedRemoteTime;
     $sunriseTime.innerHTML = formattedSunriseTime;
     $sunsetTime.innerHTML = formattedSunsetTime;
-
-    updateResultsUnits($unitsToggle.checked);
+    $cloudCover.innerHTML = cloudCover + '% cloud cover';
+    $humidity.innerHTML = humidity + '% humidity';
+    displayTempAndWindSpeed($unitsToggle.checked);
     pageState.displayResults();
   };
 }
