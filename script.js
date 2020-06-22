@@ -20,7 +20,7 @@ const $unitsToggle = document.getElementById('units-toggle');
 let temperature = 0;
 let windSpeed = 0;
 let windDirection = 0;
-let useImperialUnits = false;
+// let useImperialUnits = false;
 
 const pageState = {
   displayWorking() {
@@ -65,16 +65,10 @@ $submitBtn.addEventListener('click', function (e) {
 });
 
 $unitsToggle.addEventListener('change', function () {
-  if (this.checked) {
-    useImperialUnits = true;
-  } else {
-    useImperialUnits = false;
-  }
-
-  updateResultsUnits();
+  updateResultsUnits(this.checked);
 });
 
-function updateResultsUnits() {
+function updateResultsUnits(useImperialUnits = false) {
   if (useImperialUnits == true) {
     $temperature.innerHTML = Math.round(((temperature * 9) / 5 + 32) * 10) / 10 + ' &deg;F';
     $wind.innerHTML = windDirection + ' wind @ ' + Math.round(windSpeed * 2.237 * 10) / 10 + ' mph';
@@ -141,9 +135,7 @@ function displayWeather(weather) {
     $sunriseTime.innerHTML = formattedSunriseTime;
     $sunsetTime.innerHTML = formattedSunsetTime;
 
-    if (useImperialUnits == true) {
-      updateResultsUnits();
-    }
+    updateResultsUnits($unitsToggle.checked);
     pageState.displayResults();
   };
 }
