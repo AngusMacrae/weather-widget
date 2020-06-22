@@ -107,34 +107,9 @@ function displayWeather(weather) {
 
   // some cities' weather stations do not seem to provide wind direction data
   console.log(windDirection);
+  windDirection = angleToCompassPoint(windDirection);
 
-  switch (true) {
-    case windDirection >= 22.5 && windDirection < 67.5:
-      windDirection = 'NE';
-      break;
-    case windDirection >= 67.5 && windDirection < 112.5:
-      windDirection = 'E';
-      break;
-    case windDirection >= 112.5 && windDirection < 157.5:
-      windDirection = 'SE';
-      break;
-    case windDirection >= 157.5 && windDirection < 202.5:
-      windDirection = 'S';
-      break;
-    case windDirection >= 202.5 && windDirection < 247.5:
-      windDirection = 'SW';
-      break;
-    case windDirection >= 247.5 && windDirection < 292.5:
-      windDirection = 'W';
-      break;
-    case windDirection >= 292.5 && windDirection < 337.5:
-      windDirection = 'NW';
-      break;
-    default:
-      windDirection = 'N';
-  }
-
-  const imageURL = 'https://source.unsplash.com/1600x900/?' + city + '%20' + main;
+  const imageURL = 'https://source.unsplash.com/1600x900/?' + city + '%20' + weatherKeyword;
   let bgImg = new Image();
   bgImg.src = imageURL;
   bgImg.onload = function () {
@@ -163,6 +138,27 @@ function displayWeather(weather) {
     document.documentElement.scrollTop = 0;
     $resultsContainer.classList.add('visible');
   };
+}
+
+function angleToCompassPoint(angle) {
+  switch (true) {
+    case angle >= 22.5 && angle < 67.5:
+      return 'NE';
+    case angle >= 67.5 && angle < 112.5:
+      return 'E';
+    case angle >= 112.5 && angle < 157.5:
+      return 'SE';
+    case angle >= 157.5 && angle < 202.5:
+      return 'S';
+    case angle >= 202.5 && angle < 247.5:
+      return 'SW';
+    case angle >= 247.5 && angle < 292.5:
+      return 'W';
+    case angle >= 292.5 && angle < 337.5:
+      return 'NW';
+    default:
+      return 'N';
+  }
 }
 
 function toRemoteTime(localTime, remoteOffset) {
