@@ -1,3 +1,4 @@
+const $page = document.querySelector('body');
 const $pageTitle = document.querySelector('.page-title');
 const $cityInput = document.getElementById('city-input');
 const $submitBtn = document.getElementById('submit-btn');
@@ -14,7 +15,6 @@ const $temperature = document.getElementById('temperature');
 const $cloudCover = document.getElementById('cloud-cover');
 const $humidity = document.getElementById('humidity');
 const $wind = document.getElementById('wind');
-const $page = document.querySelector('body');
 const $unitsToggle = document.getElementById('units-toggle');
 
 let metricTemperature = 0;
@@ -45,52 +45,13 @@ const pageState = {
   },
 };
 
-$cityInput.addEventListener('keyup', function (event) {
-  // if Enter key is pressed
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    $submitBtn.click();
-  }
-});
-
-$submitBtn.addEventListener('click', function (event) {
-  event.preventDefault();
-  const inputCity = $cityInput.value;
-
-  if (inputCity != '') {
-    pageState.displayWorking();
-    fetchCityWeather(inputCity).then(weatherData => displayWeather(weatherData));
-  }
-});
-
-$unitsToggle.addEventListener('change', function () {
-  displayTempAndWindSpeed(this.checked);
-});
-
-function displayTempAndWindSpeed(useImperialUnits) {
-  let displayedTemp, tempUnit, displayedWindSpeed, windSpeedUnit;
-  if (useImperialUnits == false) {
-    displayedTemp = metricTemperature;
-    tempUnit = '\u00B0C';
-    displayedWindSpeed = metricWindSpeed;
-    windSpeedUnit = 'm/s';
-  } else {
-    displayedTemp = (metricTemperature * 9) / 5 + 32;
-    tempUnit = '\u00B0F';
-    displayedWindSpeed = metricWindSpeed * 2.237;
-    windSpeedUnit = 'mph';
-  }
-  $temperature.textContent = `${displayedTemp.toFixed(1)} ${tempUnit}`;
-  $wind.textContent = `${windDirection} wind @ ${displayedWindSpeed.toFixed(1)} ${windSpeedUnit}`;
-}
-
-function fetchCityWeather(targetCity) {
+function fetchWeather(targetCity) {
   const weatherURL = 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=' + targetCity + '&appid=e7034c9ccb454fc5547fec12cad8b5d4';
 
   return fetch(weatherURL)
     .then(response => response.json())
     .catch(error => {
-      console.log('Fetch error ', error);
+      console.log('Fetch error - ', error);
       pageState.displayNotFound();
     });
 }
@@ -106,14 +67,15 @@ function displayWeather(weather) {
 
   metricTemperature = weather.main.temp - 273.15;
   metricWindSpeed = weather.wind.speed;
-  // some cities' weather stations do not seem to provide wind direction data
+  // NOTE: some weather stations do not record wind direction
+  // TODO: handle these cases better (currently displays N by default)
   windDirection = bearingToCompassPoint(weather.wind.deg);
 
-  const userTime = new Date();
-  const userTimeOffset = userTime.getTimezoneOffset() * 60 + weather.timezone; //weather.timezone is offset from UTC in s
-  let cityTime = unixToHumanTime(userTime.getTime() / 1000 + userTimeOffset);
-  let sunriseTime = unixToHumanTime(weather.sys.sunrise + userTimeOffset);
-  let sunsetTime = unixToHumanTime(weather.sys.sunset + userTimeOffset);
+  const userCurrentDate = new Date();
+  const user_cityTimeOffset = userCurrentDate.getTimezoneOffset() * 60 + weather.timezone; // weather.timezone is offset from UTC in s
+  let cityCurrentTime = unixToHumanTime(userCurrentDate.getTime() / 1000 + user_cityTimeOffset);
+  let sunriseTime = unixToHumanTime(weather.sys.sunrise + user_cityTimeOffset);
+  let sunsetTime = unixToHumanTime(weather.sys.sunset + user_cityTimeOffset);
 
   const imageURL = 'https://source.unsplash.com/1600x900/?' + city + '%20' + weatherKeyword;
   let backgroundImage = new Image();
@@ -123,7 +85,7 @@ function displayWeather(weather) {
     $resultsTitle.textContent = 'Current weather in ' + city + ', ' + country;
     $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
     $description.textContent = description.charAt(0).toUpperCase() + description.substr(1);
-    $currentTime.textContent = 'The local time is ' + formatAsHrsMins(cityTime);
+    $currentTime.textContent = 'The local time is ' + formatAsHrsMins(cityCurrentTime);
     $sunriseTime.textContent = formatAsHrsMins(sunriseTime);
     $sunsetTime.textContent = formatAsHrsMins(sunsetTime);
     $cloudCover.textContent = cloudCover + '% cloud cover';
@@ -131,6 +93,23 @@ function displayWeather(weather) {
     displayTempAndWindSpeed($unitsToggle.checked);
     pageState.displayResults();
   };
+}
+
+function displayTempAndWindSpeed(useImperialUnits) {
+  let tempToDisplay, tempUnit, windSpeetToDisplay, windSpeedUnit;
+  if (useImperialUnits) {
+    tempToDisplay = (metricTemperature * 9) / 5 + 32;
+    tempUnit = '\u00B0F';
+    windSpeetToDisplay = metricWindSpeed * 2.237;
+    windSpeedUnit = 'mph';
+  } else {
+    tempToDisplay = metricTemperature;
+    tempUnit = '\u00B0C';
+    windSpeetToDisplay = metricWindSpeed;
+    windSpeedUnit = 'm/s';
+  }
+  $temperature.textContent = `${tempToDisplay.toFixed(1)} ${tempUnit}`;
+  $wind.textContent = `${windDirection} wind @ ${windSpeetToDisplay.toFixed(1)} ${windSpeedUnit}`;
 }
 
 function bearingToCompassPoint(bearing) {
@@ -154,12 +133,12 @@ function bearingToCompassPoint(bearing) {
   }
 }
 
-function formatAsHrsMins(inputTime) {
-  return padInitialZeros(inputTime.getHours(), 2) + ':' + padInitialZeros(inputTime.getMinutes(), 2);
-}
-
 function unixToHumanTime(unixTime) {
   return new Date(unixTime * 1000);
+}
+
+function formatAsHrsMins(inputTime) {
+  return padInitialZeros(inputTime.getHours(), 2) + ':' + padInitialZeros(inputTime.getMinutes(), 2);
 }
 
 function padInitialZeros(number, targetLength) {
@@ -171,8 +150,24 @@ function padInitialZeros(number, targetLength) {
   return number;
 }
 
-function toTitleCase(str) {
-  return str.replace(/\w\S*/g, function (txt) {
-    return txt.charAt(0).toUpperCase() + txt.substr(1);
-  });
-}
+$cityInput.addEventListener('keyup', function (event) {
+  // if Enter key is pressed
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    $submitBtn.click();
+  }
+});
+
+$submitBtn.addEventListener('click', function (event) {
+  event.preventDefault();
+  const inputCity = $cityInput.value;
+
+  if (inputCity != '') {
+    pageState.displayWorking();
+    fetchWeather(inputCity).then(weatherData => displayWeather(weatherData));
+  }
+});
+
+$unitsToggle.addEventListener('change', function () {
+  displayTempAndWindSpeed(this.checked);
+});
