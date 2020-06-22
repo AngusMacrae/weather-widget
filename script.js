@@ -85,9 +85,7 @@ function fetchCityWeather(targetCity) {
     .then(response => response.json())
     .catch(error => {
       console.log('Fetch error ', error);
-      $resultsNotFound.classList.add('visible');
-      $loadingSpinner.classList.remove('visible');
-      $submitBtn.classList.remove('collapsed');
+      pageState.displayNotFound();
     });
 }
 
