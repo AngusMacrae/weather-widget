@@ -69,11 +69,11 @@ $unitsToggle.addEventListener('change', function () {
 
 function displayTempAndWindSpeed(useImperialUnits) {
   if (useImperialUnits == true) {
-    $temperature.innerHTML = Math.round(((metricTemperature * 9) / 5 + 32) * 10) / 10 + ' &deg;F';
-    $wind.innerHTML = windDirection + ' wind @ ' + Math.round(metricWindSpeed * 2.237 * 10) / 10 + ' mph';
+    $temperature.textContent = Math.round(((metricTemperature * 9) / 5 + 32) * 10) / 10 + ' \u00B0F';
+    $wind.textContent = windDirection + ' wind @ ' + Math.round(metricWindSpeed * 2.237 * 10) / 10 + ' mph';
   } else {
-    $temperature.innerHTML = Math.round(metricTemperature * 10) / 10 + ' &deg;C';
-    $wind.innerHTML = windDirection + ' wind @ ' + metricWindSpeed + ' m/s';
+    $temperature.textContent = Math.round(metricTemperature * 10) / 10 + ' \u00B0C';
+    $wind.textContent = windDirection + ' wind @ ' + metricWindSpeed + ' m/s';
   }
 }
 
@@ -119,14 +119,14 @@ function displayWeather(weather) {
   backgroundImage.src = imageURL;
   backgroundImage.onload = () => {
     $page.style.backgroundImage = 'url(' + backgroundImage.src + ')';
-    $resultsTitle.innerHTML = 'Current weather in ' + city + ', ' + country;
+    $resultsTitle.textContent = 'Current weather in ' + city + ', ' + country;
     $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
-    $description.innerHTML = description.charAt(0).toUpperCase() + description.substr(1);
-    $currentTime.innerHTML = 'The local time is ' + formattedRemoteTime;
-    $sunriseTime.innerHTML = formattedSunriseTime;
-    $sunsetTime.innerHTML = formattedSunsetTime;
-    $cloudCover.innerHTML = cloudCover + '% cloud cover';
-    $humidity.innerHTML = humidity + '% humidity';
+    $description.textContent = description.charAt(0).toUpperCase() + description.substr(1);
+    $currentTime.textContent = 'The local time is ' + formattedRemoteTime;
+    $sunriseTime.textContent = formattedSunriseTime;
+    $sunsetTime.textContent = formattedSunsetTime;
+    $cloudCover.textContent = cloudCover + '% cloud cover';
+    $humidity.textContent = humidity + '% humidity';
     displayTempAndWindSpeed($unitsToggle.checked);
     pageState.displayResults();
   };
