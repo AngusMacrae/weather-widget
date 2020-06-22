@@ -92,14 +92,16 @@ function fetchCityWeather(targetCity) {
 function displayWeather(weather) {
   let city = weather.name;
   let country = weather.sys.country;
-  let main = weather.weather[0].main;
-  let desc = weather.weather[0].description;
+  let weatherKeyword = weather.weather[0].main;
+  let description = weather.weather[0].description;
   let icon = weather.weather[0].icon;
-  let clouds = weather.clouds.all;
-  temperature = weather.main.temp - 273.15;
+  let cloudCover = weather.clouds.all;
   let humidity = weather.main.humidity;
+
+  temperature = weather.main.temp - 273.15;
   windSpeed = weather.wind.speed;
-  windDirection = weather.wind.deg;
+  // some cities' weather stations do not seem to provide wind direction data
+  windDirection = angleToCompassPoint(weather.wind.deg);
 
   let timezoneOffset = weather.timezone; // offset from UTC in s
 
@@ -113,20 +115,16 @@ function displayWeather(weather) {
   let sunsetTime = new Date((weather.sys.sunset + userTime.getTimezoneOffset() * 60 + timezoneOffset) * 1000);
   let formattedSunsetTime = formatHrsMins(sunsetTime);
 
-  // some cities' weather stations do not seem to provide wind direction data
-  console.log(windDirection);
-  windDirection = angleToCompassPoint(windDirection);
-
   const imageURL = 'https://source.unsplash.com/1600x900/?' + city + '%20' + weatherKeyword;
-  let bgImg = new Image();
-  bgImg.src = imageURL;
-  bgImg.onload = function () {
-    $page.style.backgroundImage = 'url(' + bgImg.src + ')';
+  let backgroundImage = new Image();
+  backgroundImage.src = imageURL;
+  backgroundImage.onload = () => {
+    $page.style.backgroundImage = 'url(' + backgroundImage.src + ')';
     $resultsTitle.innerHTML = 'Current weather in ' + city + ', ' + country;
     $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
-    $description.innerHTML = desc.charAt(0).toUpperCase() + desc.substr(1);
-    $cloudCover.innerHTML = clouds + '% cloud cover';
+    $description.innerHTML = description.charAt(0).toUpperCase() + description.substr(1);
     $temperature.innerHTML = Math.round(temperature * 10) / 10 + ' &deg;C';
+    $cloudCover.innerHTML = cloudCover + '% cloud cover';
     $humidity.innerHTML = humidity + '% humidity';
     $wind.innerHTML = windDirection + ' wind @ ' + windSpeed + ' m/s';
     $currentTime.innerHTML = 'The local time is ' + formattedRemoteTime;
