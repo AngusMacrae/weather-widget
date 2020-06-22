@@ -40,7 +40,7 @@ $submitBtn.addEventListener('click', function (e) {
     $loadingSpinner.classList.add('visible');
     $submitBtn.classList.add('collapsed');
     $pageTitle.classList.remove('content-showing');
-    fetchCityWeather(inputCity);
+    fetchCityWeather(inputCity).then(weatherData => displayWeather(weatherData));
   }
 });
 
@@ -67,12 +67,8 @@ function updateResultsUnits() {
 function fetchCityWeather(targetCity) {
   const weatherURL = 'https://cors-anywhere.herokuapp.com/http://api.openweathermap.org/data/2.5/weather?q=' + targetCity + '&appid=e7034c9ccb454fc5547fec12cad8b5d4';
 
-  fetch(weatherURL)
+  return fetch(weatherURL)
     .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      displayWeather(data);
-    })
     .catch(error => {
       console.log('Fetch error ', error);
       $resultsNotFound.classList.add('visible');
