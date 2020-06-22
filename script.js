@@ -109,17 +109,11 @@ function displayWeather(weather) {
   // some cities' weather stations do not seem to provide wind direction data
   windDirection = bearingToCompassPoint(weather.wind.deg);
 
-  let timezoneOffset = weather.timezone; // offset from UTC in s
-
-  let userTime = new Date();
-  let remoteTime = toRemoteTime(userTime, timezoneOffset);
-  let formattedRemoteTime = unixToHumanTime(remoteTime);
-
-  let sunriseTime = new Date((weather.sys.sunrise + userTime.getTimezoneOffset() * 60 + timezoneOffset) * 1000);
-  let formattedSunriseTime = formatHrsMins(sunriseTime);
-
-  let sunsetTime = new Date((weather.sys.sunset + userTime.getTimezoneOffset() * 60 + timezoneOffset) * 1000);
-  let formattedSunsetTime = formatHrsMins(sunsetTime);
+  const userCurrentDate = new Date();
+  const user_cityTimeOffset = userCurrentDate.getTimezoneOffset() * 60 + weather.timezone; // weather.timezone is offset from UTC in s
+  let cityCurrentTime = unixToHumanTime(userCurrentDate.getTime() / 1000 + user_cityTimeOffset);
+  let sunriseTime = unixToHumanTime(weather.sys.sunrise + user_cityTimeOffset);
+  let sunsetTime = unixToHumanTime(weather.sys.sunset + user_cityTimeOffset);
 
   const imageURL = 'https://source.unsplash.com/1600x900/?' + city + '%20' + weatherKeyword;
   let backgroundImage = new Image();
@@ -129,9 +123,9 @@ function displayWeather(weather) {
     $resultsTitle.textContent = 'Current weather in ' + city + ', ' + country;
     $weatherIcon.src = 'http://openweathermap.org/img/wn/' + icon + '@2x.png';
     $description.textContent = description.charAt(0).toUpperCase() + description.substr(1);
-    $currentTime.textContent = 'The local time is ' + formattedRemoteTime;
-    $sunriseTime.textContent = formattedSunriseTime;
-    $sunsetTime.textContent = formattedSunsetTime;
+    $currentTime.textContent = 'The local time is ' + formatAsHrsMins(cityCurrentTime);
+    $sunriseTime.textContent = formatAsHrsMins(sunriseTime);
+    $sunsetTime.textContent = formatAsHrsMins(sunsetTime);
     $cloudCover.textContent = cloudCover + '% cloud cover';
     $humidity.textContent = humidity + '% humidity';
     displayTempAndWindSpeed($unitsToggle.checked);
@@ -160,17 +154,12 @@ function bearingToCompassPoint(bearing) {
   }
 }
 
-function toRemoteTime(localTime, remoteOffset) {
-  return localTime.getTime() / 1000 + localTime.getTimezoneOffset() * 60 + remoteOffset;
+function formatAsHrsMins(inputTime) {
+  return padInitialZeros(inputTime.getHours(), 2) + ':' + padInitialZeros(inputTime.getMinutes(), 2);
 }
 
-function formatHrsMins(inputDate) {
-  return padInitialZeros(inputDate.getHours(), 2) + ':' + padInitialZeros(inputDate.getMinutes(), 2);
-}
-
-function unixToHumanTime(unix) {
-  let humanDate = new Date(unix * 1000);
-  return formatHrsMins(humanDate);
+function unixToHumanTime(unixTime) {
+  return new Date(unixTime * 1000);
 }
 
 function padInitialZeros(number, targetLength) {
