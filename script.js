@@ -138,16 +138,7 @@ function unixToHumanTime(unixTime) {
 }
 
 function formatAsHrsMins(inputTime) {
-  return padInitialZeros(inputTime.getHours(), 2) + ':' + padInitialZeros(inputTime.getMinutes(), 2);
-}
-
-function padInitialZeros(number, targetLength) {
-  number = '' + number; // convert to string
-  while (number.length < targetLength) {
-    number = '0' + number;
-  }
-
-  return number;
+  return `${String(inputTime.getHours()).padStart(2, '0')}:${String(inputTime.getMinutes()).padStart(2, '0')}`;
 }
 
 $cityInput.addEventListener('keyup', function (event) {
