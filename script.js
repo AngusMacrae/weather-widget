@@ -96,20 +96,20 @@ function displayWeather(weather) {
 }
 
 function displayTempAndWindSpeed(useImperialUnits) {
-  let tempToDisplay, tempUnit, windSpeetToDisplay, windSpeedUnit;
+  let tempToDisplay, tempUnit, windSpeedToDisplay, windSpeedUnit;
   if (useImperialUnits) {
     tempToDisplay = (metricTemperature * 9) / 5 + 32;
     tempUnit = '\u00B0F';
-    windSpeetToDisplay = metricWindSpeed * 2.237;
+    windSpeedToDisplay = metricWindSpeed * 2.237;
     windSpeedUnit = 'mph';
   } else {
     tempToDisplay = metricTemperature;
     tempUnit = '\u00B0C';
-    windSpeetToDisplay = metricWindSpeed;
+    windSpeedToDisplay = metricWindSpeed;
     windSpeedUnit = 'm/s';
   }
   $temperature.textContent = `${tempToDisplay.toFixed(1)} ${tempUnit}`;
-  $wind.textContent = `${windDirection} wind @ ${windSpeetToDisplay.toFixed(1)} ${windSpeedUnit}`;
+  $wind.textContent = `${windDirection} wind @ ${windSpeedToDisplay.toFixed(1)} ${windSpeedUnit}`;
 }
 
 function bearingToCompassPoint(bearing) {
