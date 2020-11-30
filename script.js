@@ -109,7 +109,7 @@ function displayTempAndWindSpeed(useImperialUnits) {
     windSpeedUnit = 'm/s';
   }
   $temperature.textContent = `${tempToDisplay.toFixed(1)} ${tempUnit}`;
-  $wind.textContent = `${windDirection} wind @ ${windSpeedToDisplay.toFixed(1)} ${windSpeedUnit}`;
+  $wind.textContent = `${windSpeedToDisplay.toFixed(1)} ${windSpeedUnit} ${windDirection} wind`;
 }
 
 function bearingToCompassPoint(bearing) {
