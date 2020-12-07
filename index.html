@@ -26,13 +26,13 @@
         <header id="results-header">
           <h2 class="results-title"></h2>
           <div id="settings-wrapper">
-            <img id="settings-icon" src="img/settings.svg" />
+            <img id="settings-icon" src="img/settings.svg" alt="settings" />
             <div id="settings-panel">
               <h3>Settings</h3>
               <label for="units-toggle">
                 <span>Metric</span>
                 <input type="checkbox" class="checkbox-hidden" id="units-toggle" />
-                <div class="toggle-pill"></div>
+                <span class="toggle-pill"></span>
                 <span>Imperial</span>
               </label>
             </div>
@@ -40,39 +40,39 @@
         </header>
 
         <div id="results-body">
-          <section id="results-overview">
-            <img id="icon-main" />
+          <div id="results-overview">
+            <img id="icon-main" src="" alt="Visual representation of prevailing weather" />
             <span id="description"></span>
-          </section>
+          </div>
 
-          <section id="results-times">
+          <div id="results-times">
             <span id="current-time"></span>
             <div id="suntimes-container">
-              <img class="icon-inline" src="img/sunrise.svg" />
+              <img class="icon-inline" src="img/sunrise.svg" alt="Sunrise" />
               <span id="sunrise-time"></span>
-              <img class="icon-inline" src="img/sunset.svg" />
+              <img class="icon-inline" src="img/sunset.svg" alt="Sunset" />
               <span id="sunset-time"></span>
             </div>
-          </section>
+          </div>
 
-          <section id="results-conditions">
+          <div id="results-conditions">
             <div class="condition-wrapper">
-              <img class="icon-inline" src="img/temperature.svg" />
+              <img class="icon-inline" src="img/temperature.svg" alt="Temperature" />
               <span id="temperature"></span>
             </div>
             <div class="condition-wrapper">
-              <img class="icon-inline" src="img/cloud-cover.svg" />
+              <img class="icon-inline" src="img/cloud-cover.svg" alt="Cloud" />
               <span id="cloud-cover"></span>
             </div>
             <div class="condition-wrapper">
-              <img class="icon-inline" src="img/humidity.svg" />
+              <img class="icon-inline" src="img/humidity.svg" alt="Humidity" />
               <span id="humidity"></span>
             </div>
             <div class="condition-wrapper">
-              <img class="icon-inline" src="img/wind.svg" />
+              <img class="icon-inline" src="img/wind.svg" alt="Wind" />
               <span id="wind"></span>
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </div>

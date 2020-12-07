@@ -316,6 +316,7 @@ body {
 }
 
 .toggle-pill {
+  display: block;
   width: 2rem;
   height: 1.1rem;
   background-color: #404040;
