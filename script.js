@@ -142,8 +142,7 @@ function formatAsHrsMins(inputTime) {
 }
 
 $cityInput.addEventListener('keyup', function (event) {
-  // if Enter key is pressed
-  if (event.keyCode === 13) {
+  if (event.key === 'Enter') {
     event.preventDefault();
     $submitBtn.click();
   }
